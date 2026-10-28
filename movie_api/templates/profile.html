@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile | CineFind</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #08090d;
+            color: #f8f8fb;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            padding: 20px 6%;
+            background: #111218;
+            border-bottom: 1px solid rgba(255, 23, 56, 0.4);
+        }
+
+        .logo {
+            color: #f8f8fb;
+            font-size: 27px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #ff1738;
+        }
+
+        .profile-container {
+            width: 400px;
+            max-width: 90%;
+            margin: 80px auto;
+            padding: 35px;
+            background: #111218;
+            border: 1px solid rgba(255, 23, 56, 0.5);
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .profile-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #35121d;
+            border: 2px solid #ff1738;
+            color: #ff405b;
+            font-size: 42px;
+        }
+
+        h1 {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #9b9daa;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .profile-info {
+            padding: 18px;
+            margin-bottom: 25px;
+            background: #191a22;
+            border: 1px solid #292a33;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .profile-info p {
+            color: #9b9daa;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .profile-info h3 {
+            color: #ffffff;
+            font-size: 17px;
+            overflow-wrap: anywhere;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #ff2445, #c90025);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #ff405b;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 480px) {
+            .profile-container {
+                padding: 25px;
+                margin-top: 50px;
+            }
+
+            .logo {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="logo">
+            🎬 Cine<span>Find</span>
+        </a>
+    </nav>
+
+    <div class="profile-container">
+
+        <div class="profile-icon">
+            ♙
+        </div>
+
+        <h1>My Profile</h1>
+
+        <p class="subtitle">
+            Welcome to your CineFind account!
+        </p>
+
+        <div class="profile-info">
+            <p>Username</p>
+            <h3>{{ user.username }}</h3>
+        </div>
+
+        <a href="{% url 'home' %}" class="back-btn">
+            ← Back to Home
+        </a>
+
+    </div>
+
+</body>
+</html>

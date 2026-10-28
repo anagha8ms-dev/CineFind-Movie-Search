@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login | CineFind</title>
+    <style>
+       * {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background:
+        radial-gradient(ellipse at top left, #43000c, transparent 55%),
+        radial-gradient(ellipse at bottom right, #300008, transparent 50%),
+        #08090d;
+    color: #f8f8fb;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 15px;
+}
+
+/* Glass Login Card */
+.card {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 32px;
+
+    background: rgba(20, 15, 19, 0.78);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 23, 56, 0.65);
+    border-radius: 18px;
+
+    box-shadow:
+        0 0 30px rgba(255, 23, 56, 0.12),
+        inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+h1 {
+    color: #ff1738;
+    text-align: center;
+    font-size: 30px;
+    margin: 0 0 28px;
+}
+
+h2 {
+    color: #ffffff;
+    font-size: 25px;
+    margin-bottom: 24px;
+}
+
+label {
+    color: #e5e5eb;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.card form p {
+    margin-bottom: 20px;
+}
+
+input {
+    display: block;
+    width: 100%;
+    padding: 13px;
+
+    margin: 8px 0 14px;
+
+    background: rgba(5, 7, 10, 0.8);
+    color: white;
+
+    border: 1px solid #45434a;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+}
+
+input:focus {
+    border-color: #ff1738;
+    box-shadow: 0 0 10px rgba(255, 23, 56, 0.18);
+}
+
+button,
+.link {
+    display: block;
+    width: 100%;
+    padding: 13px;
+
+    background: linear-gradient(135deg, #ff2445, #d9002a);
+    color: white;
+
+    border: 1px solid #ff1738;
+    border-radius: 9px;
+
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+button:hover,
+.link:hover {
+    background: #c90025;
+    box-shadow: 0 0 18px rgba(255, 23, 56, 0.25);
+}
+
+.card > p {
+    color: #c9c9d1;
+    font-size: 14px;
+    margin-top: 22px;
+}
+
+.card > p a {
+    color: #ff405b;
+    text-decoration: none;
+}
+
+.card > p a:hover {
+    text-decoration: underline;
+}
+
+/* Create Account - Outline Style */
+.card .link {
+    background: transparent;
+    border: 1px solid #ff1738;
+    color: white;
+}
+
+.card .link:hover {
+    background: rgba(255, 23, 56, 0.15);
+}
+
+.errors {
+    color: #ff7184;
+    font-size: 13px;
+}
+
+/* Mobile Screen */
+@media (max-width: 480px) {
+    .card {
+        padding: 24px 20px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+}
+</style>
+</head>
+<body>
+    <div class="card">
+        <h1>🎬 CineFind</h1>
+        <h2>Welcome Back</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <p>
+                    <label for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                    </label><br>
+
+                    {{ field }}
+
+                    {% for error in field.errors %}
+                        <span class="errors">{{ error }}</span>
+                    {% endfor %}
+                </p>
+            {% endfor %}
+
+            {% for error in form.non_field_errors %}
+                <p class="errors">{{ error }}</p>
+            {% endfor %}
+
+            <button type="submit">Login</button>
+        </form>
+
+        <p>Don't have an account?</p>
+        <a class="link" href="{% url 'register' %}">Create Account</a>
+        <p><a href="{% url 'home' %}">Back to Home</a></p>
+    </div>
+</body>
+</html>

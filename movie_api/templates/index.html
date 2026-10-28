@@ -1,0 +1,1295 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CineFind | Movie Search</title>
+
+<style>
+/* ==============================
+   CINEFIND - BLACK & RED THEME
+   ============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #08090d;
+    --card: #111218;
+    --red: #ff1738;
+    --red-dark: #c90025;
+    --white: #f8f8fb;
+    --muted: #9b9daa;
+    --border: rgba(255, 23, 56, 0.28);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--white);
+    overflow-x: hidden;
+}
+
+/* ==============================
+   NAVBAR
+   ============================== */
+/* ==============================
+   CINEFIND NAVBAR
+   BLACK + RED THEME
+   ============================== */
+
+.navbar {
+    min-height: 70px;
+    padding: 10px 5.5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    background: transparent;
+    /* backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px); */
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: 800;
+    color: #f8f8fb;
+    text-decoration: none;
+    white-space: nowrap;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: #ff1738;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 22px;
+}
+
+.nav-links > a {
+    text-decoration: none;
+    color: #e6e6eb;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.25s;
+}
+
+.nav-links > a:hover {
+    color: #ff1738;
+}
+
+/* Login and Register */
+
+.nav-links .register-btn {
+    background: linear-gradient(135deg, #ff2445, #d9002a);
+    color: white;
+    padding: 11px 20px;
+    border: 1px solid #ff1738;
+    border-radius: 9px;
+}
+
+.nav-links .register-btn:hover {
+    background: #ff3c57;
+    color: white;
+}
+
+.nav-links .login-btn {
+    border: 1px solid #ff1738;
+    padding: 10px 20px;
+    border-radius: 9px;
+    color: white;
+}
+
+.nav-links .login-btn:hover {
+    background: #ff1738;
+    color: white;
+}
+
+/* ==============================
+   PROFILE ICON
+   ============================== */
+
+.profile-dropdown {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.profile-details {
+    position: relative;
+}
+
+.profile-icon {
+    width: 43px;
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    list-style: none;
+    cursor: pointer;
+
+    color: white;
+    background: #151117;
+    border: 1px solid #ff1738;
+    border-radius: 50%;
+
+    transition: 0.25s;
+}
+
+.profile-icon::-webkit-details-marker {
+    display: none;
+}
+
+.profile-icon::marker {
+    content: "";
+}
+
+.profile-icon:hover,
+.profile-details[open] .profile-icon {
+    background: #ff1738;
+    box-shadow: 0 0 16px rgba(255, 23, 56, 0.3);
+}
+
+/* ==============================
+   PROFILE DROPDOWN MENU
+   ============================== */
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+
+    width: 250px;
+    padding: 10px;
+
+    background: rgba(17, 18, 24, 0.98);
+    border: 1px solid rgba(255, 23, 56, 0.5);
+    border-radius: 13px;
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.profile-details:not([open]) .dropdown-menu {
+    display: none;
+}
+
+/* Account heading */
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 8px;
+}
+
+.profile-avatar {
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #35121d;
+    color: #ff405b;
+    border-radius: 50%;
+}
+
+.profile-user-info {
+    min-width: 0;
+}
+
+.profile-user-info h3 {
+    color: white;
+    font-size: 14px;
+    margin: 0 0 5px;
+    overflow-wrap: anywhere;
+}
+
+.profile-user-info p {
+    color: #9b9daa;
+    font-size: 11px;
+    margin: 0;
+}
+
+/* Divider */
+
+.dropdown-divider {
+    height: 1px;
+    background: #302630;
+    margin: 5px 0;
+}
+
+/* Menu links and logout */
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    padding: 12px;
+
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+
+    color: #eeeaf0;
+    text-decoration: none;
+    text-align: left;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: 0.2s;
+}
+
+.dropdown-item span {
+    width: 20px;
+    flex-shrink: 0;
+    color: #ff405b;
+    font-size: 19px;
+    text-align: center;
+}
+
+.dropdown-item:hover {
+    background: #30131c;
+    color: #ff405b;
+}
+
+.profile-dropdown form {
+    margin: 0;
+}
+
+.profile-dropdown .logout-item {
+    color: #ff405b;
+}
+
+.profile-dropdown .logout-item:hover {
+    background: rgba(255, 23, 56, 0.12);
+}
+
+/* ==============================
+   RESPONSIVE NAVBAR
+   ============================== */
+
+@media (max-width: 700px) {
+    .navbar {
+        padding: 12px 4%;
+        gap: 10px;
+    }
+
+    .logo {
+        font-size: 21px;
+    }
+
+    .nav-links {
+        gap: 10px;
+    }
+
+    .nav-links > a {
+        font-size: 12px;
+    }
+
+    .nav-links .register-btn,
+    .nav-links .login-btn {
+        padding: 9px 11px;
+    }
+
+    .profile-icon {
+        width: 38px;
+        height: 38px;
+    }
+
+    .dropdown-menu {
+        width: 235px;
+        right: 0;
+    }
+}
+
+@media (max-width: 400px) {
+    .navbar {
+        gap: 8px;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+
+    .nav-links {
+        gap: 8px;
+    }
+
+    .nav-links > a {
+        font-size: 11px;
+    }
+}
+/* ==============================
+   HERO BANNER
+   ============================== */
+
+.hero {
+    min-height: 590px;
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: center;
+
+    padding: 235px 5% 70px;
+    isolation: isolate;
+    background: #08090d;
+    border:none;
+    box-shadow:none;
+   
+}
+
+/* Background slideshow */
+
+.slides,
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border:none;
+    box-shadow:none;
+}
+
+.slides {
+    z-index: -2;
+}
+
+.slide {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    animation: slideShow 18s infinite;
+}
+
+/* First banner */
+
+.slide:nth-child(1) {
+    background-image:
+        linear-gradient(
+            to bottom,
+            rgba(5, 5, 8, 0.30) 0%,
+            rgba(7, 7, 11, 0.48) 42%,
+            rgba(7, 7, 11, 0.88) 78%,
+            #08090d 100%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(100, 0, 15, 0.25),
+            transparent 70%
+        ),
+        url("/static/images/malayalam3.jpeg");
+
+    animation-delay: 0s;
+}
+
+/* Second banner */
+
+.slide:nth-child(2) {
+    background-image:
+        linear-gradient(
+            to bottom,
+            rgba(5, 5, 8, 0.30) 0%,
+            rgba(7, 7, 11, 0.48) 42%,
+            rgba(7, 7, 11, 0.88) 78%,
+            #08090d 100%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(100, 0, 15, 0.25),
+            transparent 70%
+        ),
+        url("/static/images/spiderman2.jpeg");
+
+    animation-delay: 6s;
+}
+
+/* Third banner */
+
+.slide:nth-child(3) {
+    background-image:
+        linear-gradient(
+            to bottom,
+            rgba(5, 5, 8, 0.30) 0%,
+            rgba(7, 7, 11, 0.48) 42%,
+            rgba(7, 7, 11, 0.88) 78%,
+            #08090d 100%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(100, 0, 15, 0.25),
+            transparent 70%
+        ),
+        url("/static/images/traintobusan1.jpeg");
+
+    animation-delay: 12s;
+}
+
+@keyframes slideShow {
+    0% {
+        opacity: 0;
+    }
+
+    5% {
+        opacity: 1;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    36% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Red cinematic lines */
+
+.hero::before {
+    /* content: "";
+    position: absolute;
+    left: -5%;
+    right: -5%;
+    bottom: 22px;
+    height: 95px;
+    z-index: -1;
+    pointer-events: none;
+
+    /* border-top: 2px solid rgba(255, 23, 56, 0.7); */
+    /* border-radius: 50%;
+    transform: rotate(-3deg);
+
+    box-shadow: 0 -5px 20px rgba(255, 23, 56, 0.08); */ 
+    display:none;
+}
+
+.hero-content {
+    width: 100%;
+    max-width: 1000px;
+    color: white;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.7);
+}
+
+.hero h1 {
+    font-size: clamp(34px, 5vw, 54px);
+    font-weight: 800;
+    margin-bottom: 16px;
+    line-height: 1.2;
+    letter-spacing: -1px;
+}
+
+.hero h1 span {
+    color: var(--red);
+    text-shadow: 0 0 18px rgba(255, 23, 56, 0.18);
+}
+
+.hero p {
+    font-size: 15px;
+    color: #dedee5;
+    margin-bottom: 27px;
+    line-height: 1.7;
+}
+
+/* ==============================
+   SEARCH BAR
+   ============================== */
+
+.search-form {
+    width: 100%;
+    max-width: 730px;
+    margin: 0 auto 26px;
+
+    background: rgba(10, 11, 16, 0.94);
+    padding: 6px;
+    border: 2px solid var(--red);
+    border-radius: 40px;
+
+    display: flex;
+    gap: 8px;
+
+    box-shadow: 0 0 22px rgba(255, 23, 56, 0.12);
+    text-shadow: none;
+}
+
+.search-form:focus-within {
+    box-shadow: 0 0 25px rgba(255, 23, 56, 0.28);
+}
+
+.search-form input {
+    flex: 1;
+    min-width: 0;
+
+    border: none;
+    outline: none;
+
+    padding: 14px 20px;
+    border-radius: 30px;
+
+    font-size: 15px;
+    color: white;
+    background: transparent;
+}
+
+.search-form input::placeholder {
+    color: #a3a4af;
+}
+
+.search-form button {
+    background: linear-gradient(135deg, #ff2445, #d9002a);
+    color: white;
+    border: none;
+    border-radius: 30px;
+
+    padding: 14px 25px;
+    font-weight: bold;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.search-form button:hover {
+    background: #ff405b;
+    box-shadow: 0 0 18px rgba(255, 23, 56, 0.3);
+}
+
+/* ==============================
+   TRENDING SUGGESTIONS
+   ============================== */
+
+.try-searching {
+    font-size: 13px;
+    color: #d0d0d7;
+    margin-bottom: 13px;
+}
+
+.suggestions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.suggestions a {
+    text-decoration: none;
+    background: rgba(12, 13, 18, 0.82);
+    color: #f0f0f4;
+
+    padding: 9px 19px;
+    border: 1px solid rgba(255, 23, 56, 0.75);
+    border-radius: 30px;
+
+    font-size: 12px;
+    font-weight: 600;
+    text-shadow: none;
+    transition: 0.25s;
+}
+
+.suggestions a:hover {
+    background: var(--red);
+    border-color: var(--red);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(255, 23, 56, 0.2);
+}
+
+/* ==============================
+   MOVIE RESULTS SECTION
+   ============================== */
+
+.movies-section {
+    padding: 40px 5.5% 65px;
+    background:
+        radial-gradient(
+            ellipse at top,
+            rgba(55, 12, 24, 0.14),
+            transparent 60%
+        ),
+        #08090d;
+
+    min-height: 300px;
+    border-top: 1px solid rgba(255, 23, 56, 0.25);
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 28px;
+}
+
+.section-heading h2 {
+    font-size: clamp(21px, 3vw, 29px);
+    color: white;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.view-all {
+    text-decoration: none;
+    color: var(--red);
+    font-weight: bold;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: 0.2s;
+}
+
+.view-all:hover {
+    color: #ff7085;
+}
+
+/* Movie poster grid */
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.movie-card {
+    min-width: 0;
+    background: #101116;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 12px;
+    overflow: hidden;
+
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+    transition: transform 0.28s, border-color 0.28s,
+                box-shadow 0.28s;
+}
+
+.movie-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(255, 23, 56, 0.7);
+    box-shadow: 0 10px 28px rgba(255, 23, 56, 0.12);
+}
+
+.movie-card a {
+    display: block;
+    text-decoration: none;
+    color: white;
+}
+
+.movie-card img {
+    display: block;
+    width: 100%;
+    height: 270px;
+    object-fit: cover;
+    background: #17171d;
+    transition: transform 0.35s;
+}
+
+.movie-card:hover img {
+    transform: scale(1.025);
+}
+
+.movie-info {
+    padding: 14px 13px 16px;
+    border-top: 2px solid transparent;
+    transition: border-color 0.25s;
+}
+
+.movie-card:hover .movie-info {
+    border-top-color: var(--red);
+}
+
+.movie-info h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 7px;
+    line-height: 1.4;
+    color: #f5f5f7;
+}
+
+.movie-info p {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* ==============================
+   ERROR AND EMPTY MESSAGES
+   ============================== */
+
+.error-message {
+    background: rgba(255, 23, 56, 0.08);
+    color: #ff647a;
+    padding: 16px 20px;
+    border: 1px solid rgba(255, 23, 56, 0.4);
+    border-radius: 10px;
+    margin-bottom: 22px;
+}
+
+.empty-message {
+    color: #b6b7c1;
+    padding: 25px 0;
+    line-height: 1.7;
+}
+
+/* ==============================
+   CINEFIND PAGINATION
+   BLACK + RED THEME
+   ============================== */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 40px 0 15px;
+}
+
+.page-btn,
+.page-number {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 45px;
+    height: 45px;
+    padding: 0 14px;
+
+    background: #111218;
+    color: #f8f8fb;
+    border: 1px solid rgba(255, 23, 56, 0.35);
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.25s ease;
+}
+
+.page-btn {
+    border-color: #ff1738;
+    border-radius: 25px;
+    padding: 0 20px;
+}
+
+.page-btn:hover,
+.page-number:hover {
+    background: #ff1738;
+    border-color: #ff1738;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.page-number.active {
+    background: #ff1738;
+    color: #ffffff;
+    border-color: #ff1738;
+    box-shadow: 0 0 15px rgba(255, 23, 56, 0.2);
+}
+
+.page-info {
+    text-align: center;
+    color: #9b9daa;
+    font-size: 13px;
+    margin: 15px 0 10px;
+}
+
+@media (max-width: 500px) {
+    .pagination {
+        gap: 6px;
+        margin-top: 28px;
+    }
+
+    .page-btn,
+    .page-number {
+        min-width: 35px;
+        height: 38px;
+        padding: 0 9px;
+        font-size: 12px;
+    }
+
+    .page-btn {
+        padding: 0 12px;
+    }
+}
+
+/* ==============================
+   RESPONSIVE DESIGN
+   ============================== */
+
+
+
+@media (max-width: 700px) {
+    .navbar {
+        min-height: 65px;
+        padding: 12px 4%;
+        gap: 12px;
+    }
+
+    .logo {
+        font-size: 21px;
+    }
+
+    .tagline {
+        display: none;
+    }
+
+    .nav-links {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .nav-links a {
+        font-size: 12px;
+    }
+
+    .nav-links .register-btn,
+    .nav-links .login-btn {
+        padding: 9px 12px;
+    }
+
+    .nav-links form button {
+        padding: 8px 11px !important;
+        font-size: 12px;
+    }
+
+    .hero {
+        min-height: 570px;
+        padding: 175px 5% 55px;
+    }
+
+    .hero h1 {
+        font-size: clamp(30px, 7vw, 42px);
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .search-form {
+        border-radius: 17px;
+        gap: 4px;
+    }
+
+    .search-form input {
+        padding: 13px 12px;
+        font-size: 13px;
+    }
+
+    .search-form button {
+        padding: 13px 14px;
+        font-size: 12px;
+    }
+
+    .suggestions {
+        gap: 8px;
+    }
+
+    .suggestions a {
+        padding: 9px 13px;
+        font-size: 11px;
+    }
+
+    .movies-section {
+        padding: 30px 4% 45px;
+    }
+
+    .section-heading {
+        margin-bottom: 20px;
+    }
+
+    .section-heading h2 {
+        font-size: 21px;
+    }
+
+    .view-all {
+        font-size: 12px;
+    }
+
+    .movie-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .movie-card img {
+        height: 235px;
+    }
+
+    .movie-info {
+        padding: 11px;
+    }
+
+    .movie-info h3 {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 400px) {
+    .navbar {
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        gap: 8px;
+    }
+
+    .nav-links a {
+        font-size: 11px;
+    }
+
+    .nav-links .register-btn,
+    .nav-links .login-btn {
+        padding: 8px 9px;
+    }
+
+    .hero {
+        padding-top: 190px;
+    }
+
+    .search-form {
+        flex-direction: column;
+        border-radius: 15px;
+        padding: 7px;
+    }
+
+    .search-form input,
+    .search-form button {
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    .movie-card img {
+        height: 200px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- NAVBAR -->
+<nav class="navbar">
+
+    <a href="{% url 'home' %}" class="logo">
+        🎬 Cine<span>Find</span>
+    </a>
+
+    <div class="nav-links">
+
+        <a href="{% url 'home' %}">Home</a>
+
+        <a href="{% url 'my_watchlist' %}">
+            ♥ My Watchlist
+        </a>
+
+        {% if user.is_authenticated %}
+
+       
+
+        <div class="profile-dropdown">
+
+            <details class="profile-details">
+
+                <summary class="profile-icon"
+                         aria-label="Open profile menu"
+                         title="My Account">
+
+                    <svg width="23" height="23"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.8"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+
+                    </svg>
+
+                </summary>
+
+                <div class="dropdown-menu">
+
+                    <div class="profile-header">
+
+                        <div class="profile-avatar">
+                            <svg width="25" height="25"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.8">
+                                <circle cx="12" cy="8" r="4"/>
+                                <path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+                            </svg>
+                        </div>
+
+                        <div class="profile-user-info">
+                            <h3>{{ user.username }}</h3>
+                            <p>Welcome to CineFind</p>
+                        </div>
+
+                    </div>
+
+                    <div class="dropdown-divider"></div>
+
+                    <a href="{% url 'profile' %}" class="dropdown-item">
+                        <span>♙</span>
+                        My Profile
+                    </a>
+
+                    <a href="{% url 'my_watchlist' %}"
+                       class="dropdown-item">
+                        <span>♡</span>
+                        My Watchlist
+                    </a>
+
+                    
+
+                    <div class="dropdown-divider"></div>
+
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+
+                        <button type="submit"
+                                class="dropdown-item logout-item">
+                            <span>↪</span>
+                            Logout
+                        </button>
+                    </form>
+
+                </div>
+
+            </details>
+
+        </div>
+
+        {% else %}
+
+            <a href="{% url 'login' %}" class="login-btn">
+                Login
+            </a>
+
+            <a href="{% url 'register' %}" class="register-btn">
+                Register
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+<!-- HERO BANNER -->
+
+<section class="hero">
+
+    <div class="slides" aria-hidden="true">
+        <div class="slide"></div>
+        <div class="slide"></div>
+        <div class="slide"></div>
+    </div>
+
+    <div class="hero-content">
+        <h1>Find Your Next <span>Favourite</span></h1>
+
+        <p>
+            Explore movies, discover stories and find your next
+            favourite film in seconds.
+        </p>
+
+        <form action="{% url 'home' %}" method="get"
+              class="search-form">
+            <input
+                type="text"
+                name="title"
+                placeholder="Search movies, e.g. Drishyam"
+                value="{{ title }}"
+                required
+            >
+            <button type="submit">⌕ Search Movies</button>
+        </form>
+
+        <div class="try-searching">Try searching:</div>
+
+        <div class="suggestions">
+            <a href="{% url 'home' %}?title=Premam">Premam</a>
+            <a href="{% url 'home' %}?title=Manjummel+Boys">Manjummel Boys</a>
+            <a href="{% url 'home' %}?title=Drishyam">Drishyam</a>
+            <a href="{% url 'home' %}?title=Interstellar">Interstellar</a>
+            <a href="{% url 'home' %}?title=Avatar">Avatar</a>
+        </div>
+    </div>
+
+</section>
+
+<!-- MOVIE RESULTS -->
+
+<section class="movies-section">
+
+    {% if error %}
+        <div class="error-message">{{ error }}</div>
+    {% endif %}
+
+    {% if title %}
+        <div class="section-heading">
+            <h2>Search Results for "{{ title }}"</h2>
+            <a href="{% url 'home' %}" class="view-all">Clear Search ↗</a>
+        </div>
+
+        {% if movies %}
+            <div class="movie-grid">
+                {% for movie in movies %}
+                    <div class="movie-card">
+                        <a href="{% url 'movie_details' movie.id %}">
+                            {% if movie.poster_url %}
+                                <img src="{{ movie.poster_url }}"
+                                     alt="{{ movie.title }}"
+                                     loading="lazy">
+                            {% else %}
+                                <div style="height:270px;display:grid;
+                                    place-items:center;background:#dbeafe;">
+                                    Poster unavailable
+                                </div>
+                            {% endif %}
+
+                            <div class="movie-info">
+                                <h3>{{ movie.title }}</h3>
+                                <p>
+                                    {% if movie.release_date %}
+                                        {{ movie.release_date|slice:":4" }}
+                                    {% else %}
+                                        Release year unavailable
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-message">
+                No movies found. Try another title.
+            </p>
+        {% endif %}
+
+    {% else %}
+        <div class="section-heading">
+            <h2><i>Popular Malayalam Movies</i></h2>
+            <a href="{% url 'home' %}?title=Malayalam"
+               class="view-all">View All →</a>
+        </div>
+
+        {% if popular_movies %}
+            <div class="movie-grid">
+                {% for movie in popular_movies %}
+                    <div class="movie-card">
+                        <a href="{% url 'movie_details' movie.id %}">
+                            {% if movie.poster_url %}
+                                <img src="{{ movie.poster_url }}"
+                                     alt="{{ movie.title }}"
+                                     loading="lazy">
+                            {% else %}
+                                <div style="height:270px;display:grid;
+                                    place-items:center;background:#dbeafe;">
+                                    Poster unavailable
+                                </div>
+                            {% endif %}
+
+                            <div class="movie-info">
+                                <h3>{{ movie.title }}</h3>
+                                <p>
+                                    {% if movie.release_date %}
+                                        {{ movie.release_date|slice:":4" }}
+                                    {% else %}
+                                        Release year unavailable
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-message">
+                Popular movies are not available right now.
+            </p>
+        {% endif %}
+    {% endif %}
+
+    <!-- PAGINATION -->
+{% if not error and total_pages > 1 %}
+
+<div class="pagination">
+
+    {% if page > 1 %}
+        <a class="page-btn"
+           href="?{% if title %}title={{ title|urlencode }}&amp;{% endif %}page={{ page|add:'-1' }}">
+            &#10094; Previous
+        </a>
+    {% endif %}
+
+    {% for number in page_numbers %}
+
+        {% if number == page %}
+            <span class="page-number active">
+                {{ number }}
+            </span>
+        {% else %}
+            <a class="page-number"
+               href="?{% if title %}title={{ title|urlencode }}&amp;{% endif %}page={{ number }}">
+                {{ number }}
+            </a>
+        {% endif %}
+
+    {% endfor %}
+
+    {% if page < total_pages %}
+        <a class="page-btn"
+           href="?{% if title %}title={{ title|urlencode }}&amp;{% endif %}page={{ page|add:'1' }}">
+            Next &#10095;
+        </a>
+    {% endif %}
+
+</div>
+
+<p class="page-info">
+    Page {{ page }} of {{ total_pages }}
+</p>
+
+{% endif %}
+
+</section>
+
+</body>
+</html>

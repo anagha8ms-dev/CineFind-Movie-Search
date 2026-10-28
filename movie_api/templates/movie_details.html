@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% if movie %}{{ movie.title }} | CineFind{% else %}Movie Details | CineFind{% endif %}
+    </title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #08090d;
+            color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+
+        header {
+            background: #08090d;
+            padding: 20px 6%;
+            border-bottom: 1px solid #42121b;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        header a {
+            font-size: 27px;
+            color: #f5f5f5;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        header a span {
+            color: #ef233c;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            color: #e5e7eb;
+        }
+
+        .nav-links .login-btn {
+            padding: 11px 20px;
+            border: 1px solid #ef233c;
+            border-radius: 25px;
+        }
+
+        .nav-links .register-btn {
+            padding: 11px 20px;
+            background: #e5092b;
+            border-radius: 25px;
+            color: white;
+        }
+
+        /* MAIN CONTAINER */
+
+        .container {
+            max-width: 1250px;
+            margin: 35px auto;
+            padding: 0 30px;
+        }
+
+        .movie-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #171116, #0c0d12 65%);
+            border: 1px solid #35212a;
+            border-radius: 20px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(#ff173d, transparent);
+        }
+
+        .poster-container {
+            width: 320px;
+            flex-shrink: 0;
+        }
+
+        .poster {
+            width: 100%;
+            border-radius: 13px;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid #4b2832;
+        }
+
+        .no-poster {
+            width: 100%;
+            min-height: 430px;
+            background: #171116;
+            color: #f87185;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 1px solid #47202a;
+            border-radius: 13px;
+            padding: 20px;
+        }
+
+        .details {
+            flex: 1;
+            min-width: 0;
+            padding-top: 5px;
+        }
+
+        .details h1 {
+            color: #ffffff;
+            font-size: clamp(28px, 4vw, 42px);
+            margin-bottom: 18px;
+            line-height: 1.2;
+        }
+
+        .tagline {
+            color: #b7aab0;
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* RATING */
+
+        .rating {
+            display: inline-block;
+            padding: 10px 16px;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #ff2548, #b80022);
+            color: white;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 5px 18px #e5092b30;
+        }
+
+        /* MOVIE INFORMATION */
+
+        .info {
+            border-bottom: 1px solid #35212a;
+            padding-bottom: 18px;
+        }
+
+        .info p {
+            margin-bottom: 15px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+            color: #d1d5db;
+        }
+
+        .info strong {
+            display: inline-block;
+            min-width: 155px;
+            color: #a9a9b2;
+            font-weight: 500;
+        }
+
+        .info h3 {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #ff3452;
+            font-size: 22px;
+            border-left: 4px solid #ef233c;
+            padding-left: 12px;
+        }
+
+        .overview {
+            color: #d0d0d7;
+            line-height: 1.9;
+            font-size: 15px;
+        }
+
+        /* WATCHLIST */
+
+        .watchlist-actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 25px;
+        }
+
+        .details button {
+            background: linear-gradient(135deg, #ff2445, #c90026);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 14px 23px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .details button:hover {
+            background: #ff405c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px #e5092b35;
+        }
+
+        .watchlist-link {
+            color: #ff5269;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .watchlist-link:hover {
+            color: white;
+        }
+
+        .login-message {
+            margin-top: 24px;
+            color: #b8b8c2;
+            line-height: 1.8;
+        }
+
+        .login-message a {
+            color: #ff405c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* BACK BUTTON */
+
+        .back {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 13px 23px;
+            background: transparent;
+            color: white;
+            border: 1px solid #ef233c;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.25s;
+        }
+
+        .back:hover {
+            background: #e5092b;
+            border-color: #e5092b;
+        }
+
+        /* ERROR MESSAGE */
+
+        .message {
+            text-align: center;
+            background: #151116;
+            border: 1px solid #44202a;
+            border-radius: 16px;
+            padding: 50px 20px;
+        }
+
+        .message h2 {
+            color: #ff405c;
+            margin-bottom: 15px;
+        }
+
+        .message p {
+            color: #c4c4cc;
+            line-height: 1.7;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #050609;
+            border-top: 1px solid #35121b;
+            text-align: center;
+            padding: 25px 15px;
+            color: #92929e;
+            font-size: 14px;
+            margin-top: 50px;
+            line-height: 1.7;
+        }
+
+        footer strong {
+            color: #ff405c;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 800px) {
+            .movie-card {
+                gap: 25px;
+                padding: 22px;
+            }
+
+            .poster-container {
+                width: 260px;
+            }
+
+            .info strong {
+                min-width: 135px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            header {
+                padding: 17px 5%;
+                flex-wrap: wrap;
+            }
+
+            header a {
+                font-size: 23px;
+            }
+
+            .nav-links {
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            .nav-links a {
+                font-size: 12px;
+            }
+
+            .nav-links .login-btn,
+            .nav-links .register-btn {
+                padding: 9px 12px;
+            }
+
+            .container {
+                margin: 22px auto;
+                padding: 0 15px;
+            }
+
+            .movie-card {
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+                gap: 25px;
+            }
+
+            .poster-container {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .details {
+                width: 100%;
+            }
+
+            .details h1 {
+                font-size: 29px;
+            }
+
+            .info strong {
+                min-width: 0;
+                display: block;
+                margin-bottom: 2px;
+                color: #ff687b;
+            }
+
+            .watchlist-actions {
+                align-items: flex-start;
+            }
+
+            footer {
+                margin-top: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="{% url 'home' %}">🎬 Cine<span>Find</span></a>
+
+    <nav class="nav-links">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'my_watchlist' %}">♥ My Watchlist</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="login-btn">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="login-btn">Login</a>
+            <a href="{% url 'register' %}" class="register-btn">Register</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main class="container">
+
+    {% if movie %}
+
+        <div class="movie-card">
+
+            <div class="poster-container">
+                {% if movie.poster_url %}
+                    <img
+                        class="poster"
+                        src="{{ movie.poster_url }}"
+                        alt="{{ movie.title }} poster"
+                    >
+                {% else %}
+                    <div class="no-poster">
+                        No poster available
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="details">
+
+                <h1>{{ movie.title }}</h1>
+
+                {% if movie.tagline %}
+                    <p class="tagline">{{ movie.tagline }}</p>
+                {% endif %}
+
+                <div class="rating">
+                    ⭐ {{ movie.vote_average|floatformat:1 }} / 10
+                </div>
+
+                <div class="info">
+
+                    <p>
+                        <strong>Release Date</strong>
+                        {{ movie.release_date|default:"Not available" }}
+                    </p>
+
+                    <p>
+                        <strong>Runtime</strong>
+                        {% if movie.runtime %}
+                            {{ movie.runtime }} minutes
+                        {% else %}
+                            Not available
+                        {% endif %}
+                    </p>
+
+                    <p>
+                        <strong>Genres</strong>
+                        {% for genre in movie.genres %}
+                            {{ genre.name }}{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            Not available
+                        {% endfor %}
+                    </p>
+
+                    <p>
+                        <strong>Original Language</strong>
+                        {{ movie.original_language|upper|default:"Not available" }}
+                    </p>
+
+                    <p>
+                        <strong>Status</strong>
+                        {{ movie.status|default:"Not available" }}
+                    </p>
+
+                </div>
+
+                <h3 style="margin-top:25px; color:#ef233c;">Movie Overview</h3>
+
+                <p class="overview">
+                    {{ movie.overview|default:"No overview available for this movie." }}
+                </p>
+
+                {% if user.is_authenticated %}
+                    <div class="watchlist-actions">
+                        <form method="post"
+                              action="{% url 'add_to_watchlist' movie_id=movie.id %}">
+                            {% csrf_token %}
+                            <button type="submit">♥ Add to Watchlist</button>
+                        </form>
+
+                        <a href="{% url 'my_watchlist' %}"
+                           class="watchlist-link">View My Watchlist →</a>
+                    </div>
+                {% else %}
+                    <p class="login-message">
+                        <a href="{% url 'login' %}">Login</a>
+                        to save this movie to your watchlist.
+                    </p>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    {% else %}
+
+        <div class="message">
+            <h2>Movie Details Unavailable</h2>
+            <p>
+                {{ error|default:"We could not load this movie. Please try again." }}
+            </p>
+        </div>
+
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="back">
+        ← Back to Search
+    </a>
+
+</main>
+
+<footer>
+    <p><strong>CineFind</strong> — Discover movies, one search at a time.</p>
+    <p style="margin-top:7px; font-size:12px;">
+        This product uses the TMDB API but is not endorsed or certified by TMDB.
+    </p>
+</footer>
+
+</body>
+</html>
